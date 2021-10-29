@@ -3,7 +3,7 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const userSchema = new mongoose.Schema(
+const EmployeeSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
       trim: true,
-      // validate(value) {
-      //   if (value.toLowerCase().includes("password")) {
-      //     throw new Error("Password cannot contain any string character");
-      //   }
-      // },
+      validate(value) {
+        if (value.toLowerCase().includes("password")) {
+          throw new Error("Password cannot contain any string character");
+        }
+      },
     },
     tokens: [
       {
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // generate token
-userSchema.methods.generateToken = async function () {
+EmployeeSchema.methods.generateToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
   user.tokens = user.tokens.concat({ token });
@@ -55,7 +55,10 @@ userSchema.methods.generateToken = async function () {
   return token;
 };
 //find user by its credentials
-userSchema.statics.findUserByCredientials = async function (email, password) {
+EmployeeSchema.statics.findUserByCredientials = async function (
+  email,
+  password
+) {
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("unable to login ...!");
@@ -67,21 +70,21 @@ userSchema.statics.findUserByCredientials = async function (email, password) {
   return user;
 };
 //remove unwanted information from user object
-userSchema.methods.toJSON = function () {
+EmployeeSchema.methods.toJSON = function () {
   const user = this;
   const userobj = user.toObject();
   delete userobj.password;
   delete userobj.tokens;
   return userobj;
 };
-userSchema.pre("save", async function (next) {
+EmployeeSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
 });
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", EmployeeSchema);
 
 module.exports = User;
 

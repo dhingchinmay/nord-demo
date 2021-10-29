@@ -1,16 +1,16 @@
 const express = require("express");
-const userRoutes = new express.Router();
+const employeeRoutes = new express.Router();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
 // default welcome
-userRoutes.get("/", (req, res) => {
+employeeRoutes.get("/", (req, res) => {
   res.json("Hello world ! welcome").send();
 });
 
 // routes for users
 //user register
-userRoutes.post("/register", async (req, res) => {
-  console.log(req.body);
+employeeRoutes.post("/register", async (req, res) => {
+  console.log("fsdif");
   try {
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
@@ -24,7 +24,7 @@ userRoutes.post("/register", async (req, res) => {
   }
 });
 //login processing route
-userRoutes.post("/login", async (req, res) => {
+employeeRoutes.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findUserByCredientials(email, password);
@@ -35,7 +35,7 @@ userRoutes.post("/login", async (req, res) => {
   }
 });
 //logout user
-userRoutes.get("/logout", auth, async (req, res) => {
+employeeRoutes.get("/logout", auth, async (req, res) => {
   try {
     const index = req.user.tokens.indexOf(req.token);
     req.user.tokens.splice(index, 1);
@@ -47,7 +47,7 @@ userRoutes.get("/logout", auth, async (req, res) => {
 });
 
 //get all users
-userRoutes.get("/all", async (req, res) => {
+employeeRoutes.get("/all", async (req, res) => {
   try {
     const users = await User.find({});
     if (users == null) {
@@ -58,8 +58,14 @@ userRoutes.get("/all", async (req, res) => {
     res.status(500).send({ error });
   }
 });
+// //category
+// employeeRoutes.post('/category', (req, res) => {
 
-userRoutes.delete("/:id", async function (req, res) {
+// })
+
+module.exports = employeeRoutes;
+
+employeeRoutes.delete("/:id", auth, async (req, res) => {
   try {
     const _id = req.params.id;
     const deletedUser = await User.findByIdAndDelete(_id);
@@ -71,9 +77,3 @@ userRoutes.delete("/:id", async function (req, res) {
     res.status(404).send(error);
   }
 });
-// //category
-// userRoutes.post('/category', (req, res) => {
-
-// })
-
-module.exports = userRoutes;
