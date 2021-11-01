@@ -2,16 +2,23 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const EmployeeDetail = require("./EmployeeDetail");
 
-const EmployeeSchema = new mongoose.Schema(
+const employeeSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    lastName: {
       type: String,
       trim: true,
       required: true,
     },
     email: {
       type: String,
+      // unique: true,
       required: true,
       trim: true,
       lowercase: true,
@@ -21,71 +28,68 @@ const EmployeeSchema = new mongoose.Schema(
         }
       },
     },
-    password: {
+    dob: {
       type: String,
       required: true,
-      minlength: 8,
       trim: true,
-      validate(value) {
-        if (value.toLowerCase().includes("password")) {
-          throw new Error("Password cannot contain any string character");
-        }
-      },
     },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    birth_place: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    join_date: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    gender: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    maritial_status: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    pan_card_no: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    created_by: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// generate token
-EmployeeSchema.methods.generateToken = async function () {
-  const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
-  user.tokens = user.tokens.concat({ token });
-  await user.save();
-  return token;
-};
-//find user by its credentials
-EmployeeSchema.statics.findUserByCredientials = async function (
-  email,
-  password
-) {
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new Error("unable to login ...!");
-  }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error("unable to login...!");
-  }
-  return user;
-};
 //remove unwanted information from user object
-EmployeeSchema.methods.toJSON = function () {
-  const user = this;
-  const userobj = user.toObject();
-  delete userobj.password;
-  delete userobj.tokens;
-  return userobj;
+employeeSchema.methods.toJSON = function () {
+  const emp = this;
+  const empobj = emp.toObject();
+  delete empobj.password;
+  delete empobj.tokens;
+  return empobj;
 };
-EmployeeSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
+employeeSchema.pre("deleteOne", async function (next) {
+  const empId = this.getQuery()["_id"];
+
+  const resp = await EmployeeDetail.deleteOne({ owner: empId });
+
   next();
 });
-const User = mongoose.model("User", EmployeeSchema);
+const Employee = mongoose.model("Employee", employeeSchema);
 
-module.exports = User;
-
-// sudo mongod --port 27000 --dbpath /home/lcom/Desktop/mongodb-db/
+module.exports = Employee;

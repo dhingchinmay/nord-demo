@@ -2,28 +2,63 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
       type: String,
       required: true,
     },
-    price: {
+    lastName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
       type: Number,
       required: true,
     },
-    category: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-      ref: "Category",
+    birthPlace: {
+      type: String,
+      ref: "User",
     },
-    likes: {
+    joinDate: {
+      type: String,
+      ref: "User",
+    },
+    department: {
       type: mongoose.Types.ObjectId,
       ref: "User",
     },
-    dislikes: {
+    panCardNumber: {
       type: mongoose.Types.ObjectId,
       ref: "User",
     },
-    allLikes: {
+    gender: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    salary: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    country: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    state: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    district: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    zipcode: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    dob: {
       type: Number,
       default: 0,
       validate(value) {
