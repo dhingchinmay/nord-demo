@@ -30,10 +30,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "User",
     },
-    panCardNumber: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-    },
+
     gender: {
       type: mongoose.Types.ObjectId,
       ref: "User",

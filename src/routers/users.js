@@ -76,4 +76,53 @@ userRoutes.delete("/:id", async function (req, res) {
 
 // })
 
+userRoutes.patch("/:id", async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const user = await User.findOne({
+      _id,
+    });
+    if (!user) {
+      return res.status(404).send({ error: "No user found!" });
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body,
+        user: user.name,
+        user: user.email,
+        user: user.password,
+      },
+      { new: true }
+    );
+    res.status(202).send(updatedUser);
+  } catch (error) {
+    console.log("error", error);
+    res.status(404).send(error);
+  }
+});
+
+userRoutes.post("/add", async (req, res) => {
+  try {
+    console.log("body", req.body);
+    const { name, email, password } = req.body;
+    // const existingEmp = await Employee.findOne({ email: req.body.email });
+    // if (existingEmp) {
+    //   return res.status(400).send({ error: "Email already in use !" });
+    // }
+    const emp = await new Employee({
+      Name: name,
+      email,
+      password,
+    }).save();
+    res.send({ emp });
+    // const token = await emp.generateToken();
+    // res.status(201).send({ emp });
+    // res.send({ emp, empDetail });
+  } catch (error) {
+    console.log("Error ", error);
+    res.status(400).send(error.message);
+  }
+});
+
 module.exports = userRoutes;

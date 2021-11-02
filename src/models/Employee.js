@@ -6,12 +6,7 @@ const EmployeeDetail = require("./EmployeeDetail");
 
 const employeeSchema = new mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      trim: true,
-      required: true,
-    },
-    lastName: {
+    Name: {
       type: String,
       trim: true,
       required: true,
@@ -28,47 +23,49 @@ const employeeSchema = new mongoose.Schema(
         }
       },
     },
-    dob: {
+    password: {
       type: String,
       required: true,
+      minlength: 8,
       trim: true,
     },
-    phone: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    birth_place: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    join_date: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    // dob: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+    // phone: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+    // birth_place: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+    // join_date: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
 
-    gender: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    maritial_status: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    pan_card_no: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    created_by: {
-      type: mongoose.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
+    // gender: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+
+    // pan_card_no: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    // },
+    // created_by: {
+    //   type: mongoose.Types.ObjectId,
+    //   required: true,
+    //   ref: "User",
+    // },
   },
   {
     timestamps: true,
@@ -83,13 +80,13 @@ employeeSchema.methods.toJSON = function () {
   delete empobj.tokens;
   return empobj;
 };
-employeeSchema.pre("deleteOne", async function (next) {
-  const empId = this.getQuery()["_id"];
+// employeeSchema.pre("deleteOne", async function (next) {
+//   const empId = this.getQuery()["_id"];
 
-  const resp = await EmployeeDetail.deleteOne({ owner: empId });
+//   const resp = await EmployeeDetail.deleteOne({ owner: empId });
 
-  next();
-});
+//   next();
+// });
 const Employee = mongoose.model("Employee", employeeSchema);
 
 module.exports = Employee;
