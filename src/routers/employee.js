@@ -11,7 +11,7 @@ employeeRoutes.get("/", (req, res) => {
 employeeRoutes.post("/add", async (req, res) => {
   try {
     console.log("body", req.body);
-    const { name, email, password } = req.body;
+    const { name, email, password, dob, phone, gender } = req.body;
     // const existingEmp = await Employee.findOne({ email: req.body.email });
     // if (existingEmp) {
     //   return res.status(400).send({ error: "Email already in use !" });
@@ -20,6 +20,9 @@ employeeRoutes.post("/add", async (req, res) => {
       Name: name,
       email,
       password,
+      dob,
+      phone,
+      gender,
     }).save();
     res.send({ emp });
     // const token = await emp.generateToken();
@@ -72,23 +75,23 @@ employeeRoutes.delete("/:id", auth, async (req, res) => {
 });
 
 //update product
-employeeRoutes.patch("/:id", async (req, res) => {
+employeeRoutes.put("/:id", async (req, res) => {
   try {
     const _id = req.params.id;
-    const user = await User.findOne({
+    const employee = await Employee.findOne({
       _id,
     });
-    if (!user) {
+    if (!employee) {
       return res.status(404).send({ error: "No user found!" });
     }
-    const updatedUser = await User.findByIdAndUpdate(
+    const updatedEmployee = await Employee.findByIdAndUpdate(
       req.params.id,
       {
         ...req.body,
       },
       { new: true }
     );
-    res.status(202).send(updatedUser);
+    res.status(202).send(updatedEmployee);
   } catch (error) {
     console.log("error", error);
     res.status(404).send(error);

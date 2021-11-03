@@ -102,27 +102,4 @@ userRoutes.patch("/:id", async (req, res) => {
   }
 });
 
-userRoutes.post("/add", async (req, res) => {
-  try {
-    console.log("body", req.body);
-    const { name, email, password } = req.body;
-    // const existingEmp = await Employee.findOne({ email: req.body.email });
-    // if (existingEmp) {
-    //   return res.status(400).send({ error: "Email already in use !" });
-    // }
-    const emp = await new Employee({
-      Name: name,
-      email,
-      password,
-    }).save();
-    res.send({ emp });
-    // const token = await emp.generateToken();
-    // res.status(201).send({ emp });
-    // res.send({ emp, empDetail });
-  } catch (error) {
-    console.log("Error ", error);
-    res.status(400).send(error.message);
-  }
-});
-
 module.exports = userRoutes;
