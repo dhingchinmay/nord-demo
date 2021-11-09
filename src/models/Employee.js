@@ -23,17 +23,12 @@ const employeeSchema = new mongoose.Schema(
         }
       },
     },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-      trim: true,
-    },
-    dob: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   minlength: 8,
+    //   trim: true,
+    // },
     phone: {
       type: String,
       required: true,
@@ -44,28 +39,17 @@ const employeeSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    // dob: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
-    // phone: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
+    dob: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     // birth_place: {
     //   type: String,
     //   required: true,
     //   trim: true,
     // },
     // join_date: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    // },
-
-    // gender: {
     //   type: String,
     //   required: true,
     //   trim: true,

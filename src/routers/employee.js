@@ -11,7 +11,7 @@ employeeRoutes.get("/", (req, res) => {
 employeeRoutes.post("/add", async (req, res) => {
   try {
     console.log("body", req.body);
-    const { name, email, password, dob, phone, gender } = req.body;
+    const { name, email, phone, dob, gender } = req.body;
     // const existingEmp = await Employee.findOne({ email: req.body.email });
     // if (existingEmp) {
     //   return res.status(400).send({ error: "Email already in use !" });
@@ -19,9 +19,8 @@ employeeRoutes.post("/add", async (req, res) => {
     const emp = await new Employee({
       Name: name,
       email,
-      password,
-      dob,
       phone,
+      dob,
       gender,
     }).save();
     res.send({ emp });
@@ -34,7 +33,7 @@ employeeRoutes.post("/add", async (req, res) => {
   }
 });
 //get all product
-employeeRoutes.get("/all", auth, async (req, res) => {
+employeeRoutes.get("/all", async (req, res) => {
   try {
     const employees = await Employee.find({});
     if (employees == null) {
@@ -74,7 +73,7 @@ employeeRoutes.delete("/:id", auth, async (req, res) => {
   }
 });
 
-//update product
+//update employee
 employeeRoutes.put("/:id", async (req, res) => {
   try {
     const _id = req.params.id;
